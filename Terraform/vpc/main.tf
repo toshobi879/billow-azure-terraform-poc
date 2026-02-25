@@ -12,7 +12,7 @@ resource "azurerm_virtual_network" "vnet" {
   tags                = var.tags
 }
 
-# Public Subnets
+
 resource "azurerm_subnet" "public" {
   for_each             = var.public_subnets
   name                 = "snet-${var.environment}-public-${each.key}"
@@ -21,7 +21,7 @@ resource "azurerm_subnet" "public" {
   address_prefixes     = [each.value]
 }
 
-# Private Subnets
+
 resource "azurerm_subnet" "private" {
   for_each             = var.private_subnets
   name                 = "snet-${var.environment}-private-${each.key}"
@@ -30,7 +30,7 @@ resource "azurerm_subnet" "private" {
   address_prefixes     = [each.value]
 }
 
-# NAT Gateway (for private subnets outbound)
+
 resource "azurerm_public_ip" "nat_pip" {
   name                = "pip-${var.environment}-nat"
   location            = azurerm_resource_group.rg.location
@@ -121,4 +121,5 @@ resource "azurerm_subnet_network_security_group_association" "private_assoc" {
   for_each                  = azurerm_subnet.private
   subnet_id                 = each.value.id
   network_security_group_id = azurerm_network_security_group.private_nsg.id
+
 }
