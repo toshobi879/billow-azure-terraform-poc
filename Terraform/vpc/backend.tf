@@ -1,9 +1,10 @@
 terraform {
   backend "azurerm" {
-    resource_group_name  = "rg-terraform-state"
-    storage_account_name = "tfstateprodstorage123"  
+    resource_group_name  = "Terraform_IaC_POC"
+    storage_account_name = "tfstatestorage"  
     container_name       = "tfstate"
     key                  = "network/${var.environment}.tfstate"
   }
 
 }
+
