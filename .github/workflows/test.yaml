@@ -1,0 +1,29 @@
+name: Verify Azure Access (OIDC only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # required for OIDC
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Azure Login & RG Access
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Azure (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Azure whoami (read-only verification)
+        run: |
+          echo "=== Subscription Info ==="
+          az account show
+
+          echo "=== Resource Group Info ==="
+          az group show --name Terraform_IaC_POC
