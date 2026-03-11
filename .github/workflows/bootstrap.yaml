@@ -22,20 +22,21 @@ permissions:
 
 env:
   TF_WORKING_DIR: terraform/bootstrap
+  TF_VERSION: 1.9.5
 
 jobs:
-  bootstrap:
-    name: Deploy Terraform Backend
-    runs-on: ubuntu-latest
 
+  terraform-bootstrap:
+    name: Terraform Bootstrap
+    runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'dev' }}
 
     steps:
 
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Azure Login (OIDC)
+      - name: Azure Login using OIDC
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -45,24 +46,16 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.7.5
+          terraform_version: ${{ env.TF_VERSION }}
 
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform init
 
-      - name: Terraform Validate
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform validate
-
-      - name: Terraform Plan
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: |
-          terraform plan \
-          -var-file=bootstrap.tfvars \
-          -out=tfplan
-
       - name: Terraform Apply
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
-          terraform apply -auto-approve tfplan
+          terraform apply -auto-approve \
+            -var-file=bootstrap.tfvars \
+            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}"
