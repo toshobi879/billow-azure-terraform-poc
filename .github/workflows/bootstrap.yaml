@@ -2,19 +2,6 @@ name: Terraform Bootstrap Backend
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Environment"
-        required: true
-        type: choice
-        options:
-          - dev
-          - prod
-
-  push:
-    paths:
-      - "terraform/bootstrap/**"
-      - ".github/workflows/deploy-bootstrap.yml"
 
 permissions:
   id-token: write
@@ -27,16 +14,15 @@ env:
 jobs:
 
   terraform-bootstrap:
-    name: Terraform Bootstrap
+    name: Deploy Terraform Backend
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment || 'dev' }}
 
     steps:
 
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Azure Login using OIDC
+      - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
