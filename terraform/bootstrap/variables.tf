@@ -14,7 +14,12 @@ variable "storage_account_name" {
 }
 
 variable "container_name" {
-  description = "Terraform state container name"
+  description = "Terraform state container"
+  type        = string
+}
+
+variable "github_principal_id" {
+  description = "GitHub OIDC Service Principal Object ID"
   type        = string
 }
 
@@ -28,22 +33,10 @@ variable "tenant_id" {
   type        = string
 }
 
-variable "github_principal_id" {
-  description = "Service principal object id for GitHub OIDC"
-  type        = string
-}
-
 variable "tags" {
-  type = map(string)
+  description = "Resource tags"
+  type        = map(string)
   default = {
     managed-by = "terraform"
   }
 }
-variable "subscription_id" {
-  type = string
-}
-
-variable "tenant_id" {
-  type = string
-}
-
