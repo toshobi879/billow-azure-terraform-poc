@@ -3,6 +3,11 @@ variable "resource_group_name" {
   type        = string
 }
 
+variable "location" {
+  description = "Azure region for storage account"
+  type        = string
+}
+
 variable "storage_account_name" {
   description = "Terraform state storage account name"
   type        = string
