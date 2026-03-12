@@ -1,5 +1,5 @@
 output "backend_resource_group" {
-  value = azurerm_resource_group.tf_backend.name
+  value = data.azurerm_resource_group.tf_backend.name
 }
 
 output "backend_storage_account" {
