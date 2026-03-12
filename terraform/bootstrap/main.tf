@@ -1,11 +1,23 @@
 ############################################
+# Backend Resource Group
+############################################
+
+resource "azurerm_resource_group" "tf_backend" {
+  name     = var.resource_group_name
+  location = var.location
+
+  tags = var.tags
+}
+
+############################################
 # Storage Account for Terraform State
 ############################################
 
 resource "azurerm_storage_account" "tf_state" {
   name                     = var.storage_account_name
-  resource_group_name      = var.resource_group_name
-  location                 = var.location
+  resource_group_name      = azurerm_resource_group.tf_backend.name
+  location                 = azurerm_resource_group.tf_backend.location
+
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
@@ -33,21 +45,11 @@ resource "azurerm_storage_account" "tf_state" {
 }
 
 ############################################
-# Blob Container
+# Terraform State Container
 ############################################
 
 resource "azurerm_storage_container" "tf_state" {
   name                  = var.container_name
   storage_account_name  = azurerm_storage_account.tf_state.name
   container_access_type = "private"
-}
-
-############################################
-# RBAC for GitHub OIDC
-############################################
-
-resource "azurerm_role_assignment" "github_backend_access" {
-  scope                = azurerm_storage_account.tf_state.id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = var.github_principal_id
 }
