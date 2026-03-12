@@ -13,7 +13,7 @@ data "azurerm_resource_group" "tf_backend" {
 resource "azurerm_storage_account" "tf_state" {
   name                     = var.storage_account_name
   resource_group_name      = data.azurerm_resource_group.tf_backend.name
-  location                 = data.azurerm_resource_group.tf_backend.location
+  location                 = var.location
 
   account_tier             = "Standard"
   account_replication_type = "LRS"
