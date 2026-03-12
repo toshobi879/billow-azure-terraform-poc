@@ -1,11 +1,11 @@
-output "storage_account_name" {
+output "backend_resource_group" {
+  value = azurerm_resource_group.tf_backend.name
+}
+
+output "backend_storage_account" {
   value = azurerm_storage_account.tf_state.name
 }
 
-output "container_name" {
+output "backend_container" {
   value = azurerm_storage_container.tf_state.name
-}
-
-output "storage_account_id" {
-  value = azurerm_storage_account.tf_state.id
 }
