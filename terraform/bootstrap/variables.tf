@@ -1,5 +1,5 @@
 variable "resource_group_name" {
-  description = "Resource group for Terraform backend"
+  description = "Terraform backend resource group"
   type        = string
 }
 
@@ -9,7 +9,7 @@ variable "location" {
 }
 
 variable "storage_account_name" {
-  description = "Terraform state storage account name"
+  description = "Terraform backend storage account"
   type        = string
 }
 
@@ -18,25 +18,12 @@ variable "container_name" {
   type        = string
 }
 
-variable "github_principal_id" {
-  description = "GitHub OIDC Service Principal Object ID"
-  type        = string
-}
-
-variable "subscription_id" {
-  description = "Azure subscription id"
-  type        = string
-}
-
-variable "tenant_id" {
-  description = "Azure tenant id"
-  type        = string
-}
-
 variable "tags" {
   description = "Resource tags"
   type        = map(string)
+
   default = {
-    managed-by = "terraform"
+    managed-by  = "terraform"
+    environment = "backend"
   }
 }
