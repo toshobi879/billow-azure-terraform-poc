@@ -1,12 +1,9 @@
 ############################################
-# Backend Resource Group
+# Reference Existing Resource Group
 ############################################
 
-resource "azurerm_resource_group" "tf_backend" {
-  name     = var.resource_group_name
-  location = var.location
-
-  tags = var.tags
+data "azurerm_resource_group" "tf_backend" {
+  name = var.resource_group_name
 }
 
 ############################################
@@ -15,8 +12,8 @@ resource "azurerm_resource_group" "tf_backend" {
 
 resource "azurerm_storage_account" "tf_state" {
   name                     = var.storage_account_name
-  resource_group_name      = azurerm_resource_group.tf_backend.name
-  location                 = azurerm_resource_group.tf_backend.location
+  resource_group_name      = data.azurerm_resource_group.tf_backend.name
+  location                 = data.azurerm_resource_group.tf_backend.location
 
   account_tier             = "Standard"
   account_replication_type = "LRS"
@@ -25,7 +22,6 @@ resource "azurerm_storage_account" "tf_state" {
   allow_nested_items_to_be_public = false
 
   blob_properties {
-
     versioning_enabled = true
 
     delete_retention_policy {
@@ -41,7 +37,10 @@ resource "azurerm_storage_account" "tf_state" {
     prevent_destroy = true
   }
 
-  tags = var.tags
+  tags = {
+    managed-by  = "terraform"
+    environment = "backend"
+  }
 }
 
 ############################################
