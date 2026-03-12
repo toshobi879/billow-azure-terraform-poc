@@ -1,58 +1,57 @@
 name: Terraform Bootstrap Backend
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: "Select Environment"
-        required: true
-        type: choice
-        options:
-          - dev
-          - prod
+workflow_dispatch:
+inputs:
+environment:
+description: "Select Environment"
+required: true
+type: choice
+options:
+- dev
+- prod
 
 permissions:
-  id-token: write
-  contents: read
+id-token: write
+contents: read
 
 env:
-  TF_WORKING_DIR: terraform/bootstrap
-  TF_VERSION: 1.9.5
+TF_WORKING_DIR: terraform/bootstrap
+TF_VERSION: 1.9.5
 
 jobs:
+terraform-bootstrap:
+name: Deploy Terraform Backend
+runs-on: ubuntu-latest
 
-  terraform-bootstrap:
-    name: Deploy Terraform Backend
-    runs-on: ubuntu-latest
+```
+environment: ${{ github.event.inputs.environment }}
 
-    # attach environment
-    environment: ${{ github.event.inputs.environment }}
+steps:
+  - name: Checkout Repository
+    uses: actions/checkout@v4
 
-    steps:
+  - name: Azure Login (OIDC)
+    uses: azure/login@v2
+    with:
+      client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  - name: Setup Terraform
+    uses: hashicorp/setup-terraform@v3
+    with:
+      terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Azure Login (OIDC)
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  - name: Terraform Init
+    working-directory: ${{ env.TF_WORKING_DIR }}
+    run: terraform init
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
+  - name: Terraform Plan
+    working-directory: ${{ env.TF_WORKING_DIR }}
+    run: terraform plan -var-file=bootstrap.tfvars
 
-      - name: Terraform Init
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform init
-
-      - name: Terraform Apply
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: |
-          terraform apply -auto-approve \
-            -var-file=bootstrap.tfvars \
-            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
-            -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}"
+  - name: Terraform Apply
+    working-directory: ${{ env.TF_WORKING_DIR }}
+    run: terraform apply -auto-approve -var-file=bootstrap.tfvars
+```
