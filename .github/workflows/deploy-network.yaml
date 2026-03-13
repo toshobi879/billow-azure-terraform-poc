@@ -24,10 +24,10 @@ jobs:
   terraform-network:
     name: Deploy VNet Infrastructure
     runs-on: ubuntu-latest
-
     environment: ${{ github.event.inputs.environment }}
 
     steps:
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -43,20 +43,18 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
+      - name: Copy Backend Configuration
+        run: |
+          cp ${{ env.ENV_DIR }}/backend.tf ${{ env.TF_WORKING_DIR }}/backend.tf
+
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: |
-          terraform init \
-          -backend-config="${{ env.ENV_DIR }}/backend.tf"
+        run: terraform init
 
       - name: Terraform Plan
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: |
-          terraform plan \
-          -var-file="${{ env.ENV_DIR }}/vnet.tfvars"
+        run: terraform plan -var-file="${{ env.ENV_DIR }}/vnet.tfvars"
 
       - name: Terraform Apply
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: |
-          terraform apply -auto-approve \
-          -var-file="${{ env.ENV_DIR }}/vnet.tfvars"
+        run: terraform apply -auto-approve -var-file="${{ env.ENV_DIR }}/vnet.tfvars"
