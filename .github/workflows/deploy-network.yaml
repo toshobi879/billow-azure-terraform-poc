@@ -18,7 +18,7 @@ permissions:
 env:
   TF_VERSION: 1.9.5
   TF_WORKING_DIR: terraform/workloads
-  ENV_DIR: envs/${{ github.event.inputs.environment }}
+  ENV_NAME: ${{ github.event.inputs.environment }}
 
   ARM_USE_OIDC: true
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -32,6 +32,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
 
     steps:
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -49,7 +50,7 @@ jobs:
 
       - name: Copy Backend Configuration
         run: |
-          cp terraform/workloads/${{ env.ENV_DIR }}/backend.tf terraform/workloads/backend.tf
+          cp terraform/workloads/envs/${{ env.ENV_NAME }}/backend.tf terraform/workloads/backend.tf
 
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
@@ -57,8 +58,8 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform plan -var-file="${{ env.ENV_DIR }}/vnet.tfvars"
+        run: terraform plan -var-file="envs/${{ env.ENV_NAME }}/vnet.tfvars"
 
       - name: Terraform Apply
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform apply -auto-approve -var-file="${{ env.ENV_DIR }}/vnet.tfvars"
+        run: terraform apply -auto-approve -var-file="envs/${{ env.ENV_NAME }}/vnet.tfvars"
