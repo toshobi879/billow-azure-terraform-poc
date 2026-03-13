@@ -53,5 +53,5 @@ resource "azurerm_subnet" "private_endpoint_subnet" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [var.private_endpoint_subnet_cidr]
 
-  private_endpoint_network_policies_enabled = false
+  private_endpoint_network_policies = "Disabled"
 }
