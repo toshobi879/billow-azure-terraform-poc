@@ -20,14 +20,19 @@ env:
   TF_WORKING_DIR: terraform/workloads
   ENV_DIR: terraform/workloads/envs/${{ github.event.inputs.environment }}
 
+  ARM_USE_OIDC: true
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
 jobs:
   terraform-network:
     name: Deploy VNet Infrastructure
     runs-on: ubuntu-latest
+
     environment: ${{ github.event.inputs.environment }}
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
