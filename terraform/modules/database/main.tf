@@ -1,7 +1,7 @@
 resource "azurerm_mysql_flexible_server" "mysql" {
   name                   = "${var.project_name}-mysql"
-  location               = var.location
   resource_group_name    = var.resource_group_name
+  location               = var.location
 
   administrator_login    = var.db_admin_user
   administrator_password = var.db_admin_password
@@ -9,13 +9,25 @@ resource "azurerm_mysql_flexible_server" "mysql" {
   sku_name               = var.sku_name
   version                = "8.0.21"
 
+  # ✅ VNet integration (your existing subnet)
   delegated_subnet_id    = var.db_subnet_id
 
-  # storage_mb = 20480
+  # ❗ IMPORTANT: remove if not created via Terraform
+  # private_dns_zone_id = var.private_dns_zone_id
 
-  backup_retention_days  = 7
+  backup_retention_days        = 7
+  geo_redundant_backup_enabled = false
 
   public_network_access_enabled = false
 
   tags = var.tags
+}
+
+resource "azurerm_mysql_flexible_database" "db" {
+  name                = var.db_name
+  resource_group_name = var.resource_group_name
+  server_name         = azurerm_mysql_flexible_server.mysql.name
+
+  charset   = "utf8mb4"
+  collation = "utf8mb4_unicode_ci"
 }
