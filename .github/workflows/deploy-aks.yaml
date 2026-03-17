@@ -17,7 +17,7 @@ permissions:
 
 env:
   TF_VERSION: 1.9.5
-  TF_WORKING_DIR: terraform/workloads
+  TF_WORKING_DIR: terraform/aks
   ENV_NAME: ${{ github.event.inputs.environment }}
 
   ARM_USE_OIDC: true
@@ -50,7 +50,7 @@ jobs:
 
       - name: Copy Backend Configuration
         run: |
-          cp terraform/workloads/envs/${{ env.ENV_NAME }}/backend.tf terraform/workloads/backend.tf
+          cp terraform/aks/envs/${{ env.ENV_NAME }}/backend.tf terraform/aks/backend.tf
 
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
