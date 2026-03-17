@@ -2,6 +2,6 @@ output "mysql_fqdn" {
   value = module.database.mysql_fqdn
 }
 
-output "database_name" {
-  value = module.database.database_name
+output "mysql_server_name" {
+  value = module.database.mysql_server_name
 }
