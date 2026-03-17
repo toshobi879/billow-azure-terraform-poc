@@ -7,8 +7,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   default_node_pool {
     name           = "nodepool1"
     node_count     = 1
-    vm_size        = "Standard_B2s"   # cheapest stable
-    vnet_subnet_id = var.aks_subnet_id
+    vm_size        = "Standard_B2s"
+    vnet_subnet_id = var.aks_subnet_id  
   }
 
   identity {
@@ -18,9 +18,5 @@ resource "azurerm_kubernetes_cluster" "aks" {
   network_profile {
     network_plugin    = "azure"
     load_balancer_sku = "standard"
-  }
-
-  tags = {
-    Environment = "POC"
   }
 }
