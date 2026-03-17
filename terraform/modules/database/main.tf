@@ -11,18 +11,11 @@ resource "azurerm_mysql_flexible_server" "mysql" {
 
   delegated_subnet_id    = var.db_subnet_id
 
-  storage_mb             = 20480
+  # storage_mb = 20480
+
   backup_retention_days  = 7
 
   public_network_access_enabled = false
 
   tags = var.tags
-}
-
-resource "azurerm_mysql_flexible_database" "db" {
-  name                = var.db_name
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_mysql_flexible_server.mysql.name
-  charset             = "utf8mb4"
-  collation           = "utf8mb4_unicode_ci"
 }
