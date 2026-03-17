@@ -1,15 +1,20 @@
 variable "project_name" {}
-variable "resource_group_name" {}
 variable "location" {}
-
-variable "db_admin_username" {}
-variable "db_admin_password" {
-  sensitive = true
-}
+variable "resource_group_name" {}
 
 variable "db_name" {}
-variable "sku_name" {}
+
+variable "db_admin_user" {}
+variable "db_admin_password" {}
+
+variable "db_subnet_id" {}
+
+# optional but recommended
+variable "sku_name" {
+  default = "B_Standard_B1ms"
+}
 
 variable "tags" {
-  type = map(string)
+  type    = map(string)
+  default = {}
 }
