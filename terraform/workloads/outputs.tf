@@ -1,19 +1,19 @@
 output "vnet_id" {
-  value = azurerm_virtual_network.vnet.id
+  value = module.vnet.vnet_id
 }
 
 output "aks_subnet_id" {
-  value = azurerm_subnet.aks_subnet.id
+  value = module.vnet.aks_subnet_id
 }
 
 output "db_subnet_id" {
-  value = azurerm_subnet.db_subnet.id
+  value = module.vnet.db_subnet_id
 }
 
 output "appgw_subnet_id" {
-  value = azurerm_subnet.appgw_subnet.id
+  value = module.vnet.appgw_subnet_id
 }
 
 output "private_endpoint_subnet_id" {
-  value = azurerm_subnet.private_endpoint_subnet.id
+  value = module.vnet.private_endpoint_subnet_id
 }
