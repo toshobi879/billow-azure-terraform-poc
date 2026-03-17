@@ -1,5 +1,6 @@
 provider "azurerm" {
   features {}
 
-  skip_provider_registration = true
+  use_oidc = true
+  resource_provider_registrations = "none"
 }
