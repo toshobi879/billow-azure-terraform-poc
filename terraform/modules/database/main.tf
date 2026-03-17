@@ -9,16 +9,10 @@ resource "azurerm_mysql_flexible_server" "mysql" {
   sku_name               = var.sku_name
   version                = "8.0.21"
 
-  # ✅ VNet integration (your existing subnet)
   delegated_subnet_id    = var.db_subnet_id
-
-  # ❗ IMPORTANT: remove if not created via Terraform
-  # private_dns_zone_id = var.private_dns_zone_id
 
   backup_retention_days        = 7
   geo_redundant_backup_enabled = false
-
-  public_network_access_enabled = false
 
   tags = var.tags
 }
