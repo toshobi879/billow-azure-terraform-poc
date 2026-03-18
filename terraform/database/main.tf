@@ -11,7 +11,7 @@ data "terraform_remote_state" "network" {
 
 module "database" {
   source = "../modules/database"
-
+  mysql_version       = var.mysql_version
   project_name        = var.project_name
   location            = var.location
   resource_group_name = var.resource_group_name
