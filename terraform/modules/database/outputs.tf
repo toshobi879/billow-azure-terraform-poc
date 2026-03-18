@@ -8,10 +8,10 @@ output "db_name" {
 
 output "db_user" {
   value     = "${var.db_admin_user}@${azurerm_mysql_flexible_server.mysql.name}"
-  sensitive = true
+
 }
 
 output "db_password" {
   value     = var.db_admin_password
-  sensitive = true
+
 }
