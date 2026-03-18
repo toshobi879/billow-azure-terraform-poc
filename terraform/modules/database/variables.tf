@@ -8,7 +8,8 @@ variable "db_admin_user" {}
 variable "db_admin_password" {}
 
 variable "db_subnet_id" {}
-variable "version" {}
+variable "mysql_version" {
+}
 
 # optional but recommended
 variable "sku_name" {
