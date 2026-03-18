@@ -7,7 +7,7 @@ resource "azurerm_mysql_flexible_server" "mysql" {
   administrator_password = var.db_admin_password
 
   sku_name               = var.sku_name
-  version                = "8.0.21"
+  version                = var.version
 
   delegated_subnet_id    = var.db_subnet_id
 
