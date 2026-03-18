@@ -6,7 +6,8 @@ variable "db_name" {}
 
 variable "db_admin_user" {}
 variable "db_admin_password" {}
-
+variable "mysql_version" {
+}
 
 # optional but recommended
 variable "sku_name" {
